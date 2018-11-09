@@ -4,9 +4,11 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
@@ -172,7 +174,8 @@ public class TestClientApplication {
 
         return args -> {
 
-            var response = Optional.ofNullable(sbxCloudFindService.loadPage().block());
+            Optional<Rows<CartBoxItem>> response = Optional.ofNullable(sbxCloudFindService.loadPage(new ParameterizedTypeReference<Rows<CartBoxItem>>() {
+            }).block());
 
             response.ifPresent(res -> {
                 Arrays.stream(res.getResults()).forEach(box -> {
